@@ -47,37 +47,21 @@ fn check_safe(levels: &Vec::<i32>) -> bool {
 
     let mut previous_level = levels.first().unwrap();
 
-    let mut is_safe = true;
-    let mut increasing = false;
-    let mut decreasing = false;
+    let mut delta = 0;
 
     for level in levels[1..].iter() {
-        
-        if level == previous_level {
-            is_safe = false;
-            break;
-        }
-        
-        if level > previous_level {
-            increasing = true;
-        } else if level < previous_level {
-            decreasing = true;
-        }
 
-        let difference = (level - previous_level).abs();
+        let change = level - previous_level;
+        let difference = change.abs();
 
         if difference > 3 {
-            is_safe = false;
-            break;
+            return false
         }
 
-        if decreasing && increasing {
-            is_safe = false;
-            break;
-        }
+        delta += change.signum();
 
         previous_level = level;
     }
 
-    is_safe
+    delta.abs() == levels.len() as i32 - 1
 }
